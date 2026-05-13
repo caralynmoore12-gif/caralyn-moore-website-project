@@ -17,7 +17,7 @@ export default function PasswordGate() {
     }
   }, [router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password.trim().toLowerCase() === "dee") {
       setError(false);
@@ -41,7 +41,7 @@ export default function PasswordGate() {
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", alignItems: "center", justifyContent: "center", fontFamily: font }}>
       <h1 style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🔒 Enter Password</h1>
       <p style={{ fontSize: "1rem", marginBottom: "1.5rem", color: "#555", fontStyle: "italic" }}>
-        Clue: the last person we saw voted out on survivor 50
+        The last person we saw get voted out on Survivor 50:
       </p>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
         <input
