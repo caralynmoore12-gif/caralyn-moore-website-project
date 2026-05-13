@@ -6,7 +6,7 @@ export default function Home() {
       </h1>
       <p style={{ fontFamily: "Comic Sans MS, Comic Sans, cursive", fontSize: "1.5rem", marginTop: "1rem" }}>
         And my husband Matt is hideous!
-      </h1>
+      </p>
     </div>
   );
 }
