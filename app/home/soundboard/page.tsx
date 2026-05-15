@@ -5,6 +5,7 @@ import Link from "next/link";
 const font = "Comic Sans MS, Comic Sans, cursive";
 
 const items = [
+  { id: "03", image: "/soundboard/images/03.png", clips: ["/soundboard/clips/03/soundboard clips_blueberries.mp3"] },
   {
     id: "01",
     image: "/soundboard/images/01.png",
@@ -20,6 +21,8 @@ const items = [
       "/soundboard/clips/01/soundboard clips_jail_09.mp3",
     ],
   },
+  { id: "05", image: "/soundboard/images/05.png", clips: ["/soundboard/clips/05/soundboard clips_love island_text.mp3"] },
+  { id: "04", image: "/soundboard/images/04.png", clips: ["/soundboard/clips/04/soundboard clips_little women_rudest boy.mp3"] },
   {
     id: "02",
     image: "/soundboard/images/02.png",
@@ -30,13 +33,10 @@ const items = [
       "/soundboard/clips/02/soundboard clips_rock facts_04.mp3",
     ],
   },
-  { id: "03", image: "/soundboard/images/03.png", clips: ["/soundboard/clips/03/soundboard clips_blueberries.mp3"] },
-  { id: "04", image: "/soundboard/images/04.png", clips: ["/soundboard/clips/04/soundboard clips_little women_rudest boy.mp3"] },
-  { id: "05", image: "/soundboard/images/05.png", clips: ["/soundboard/clips/05/soundboard clips_love island_text.mp3"] },
-  { id: "06", image: "/soundboard/images/06.png", clips: ["/soundboard/clips/06/soundboard clips_moonstruck_bring me the big knife.mp3"] },
-  { id: "07", image: "/soundboard/images/07.png", clips: ["/soundboard/clips/07/soundboard clips_over the garden wall_aint that just the way.mp3"] },
-  { id: "08", image: "/soundboard/images/08.png", clips: ["/soundboard/clips/08/soundboard clips_palm springs_good leg.mp3"] },
   { id: "09", image: "/soundboard/images/09.png", clips: ["/soundboard/clips/09/soundboard clips_twilight_aro laugh.mp3"] },
+  { id: "07", image: "/soundboard/images/07.png", clips: ["/soundboard/clips/07/soundboard clips_over the garden wall_aint that just the way.mp3"] },
+  { id: "06", image: "/soundboard/images/06.png", clips: ["/soundboard/clips/06/soundboard clips_moonstruck_bring me the big knife.mp3"] },
+  { id: "08", image: "/soundboard/images/08.png", clips: ["/soundboard/clips/08/soundboard clips_palm springs_good leg.mp3"] },
 ];
 
 export default function SoundboardPage() {
@@ -60,8 +60,6 @@ export default function SoundboardPage() {
       <p style={{ fontSize: "0.85rem", marginBottom: "2rem" }}>
         <Link href="/home" style={{ color: "#333" }}>← Back</Link>
       </p>
-
-      <h1 style={{ fontSize: "2rem", marginBottom: "2rem" }}>Am I in trouble?</h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
         {items.map((item) => (
