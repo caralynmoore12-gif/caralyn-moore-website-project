@@ -1,14 +1,10 @@
 "use client";
 import { useRef } from "react";
-import Link from "next/link";
-
-const font = "Comic Sans MS, Comic Sans, cursive";
 
 const items = [
   { id: "03", image: "/soundboard/images/03.png", clips: ["/soundboard/clips/03/soundboard clips_blueberries.mp3"] },
   {
-    id: "01",
-    image: "/soundboard/images/01.png",
+    id: "01", image: "/soundboard/images/01.png",
     clips: [
       "/soundboard/clips/01/soundboard clips_jail_01.mp3",
       "/soundboard/clips/01/soundboard clips_jail_02.mp3",
@@ -24,8 +20,7 @@ const items = [
   { id: "08", image: "/soundboard/images/08.png", clips: ["/soundboard/clips/08/soundboard clips_palm springs_good leg.mp3"] },
   { id: "04", image: "/soundboard/images/04.png", clips: ["/soundboard/clips/04/soundboard clips_little women_rudest boy.mp3"] },
   {
-    id: "02",
-    image: "/soundboard/images/02.png",
+    id: "02", image: "/soundboard/images/02.png",
     clips: [
       "/soundboard/clips/02/soundboard clips_rock facts_01.mp3",
       "/soundboard/clips/02/soundboard clips_rock facts_02.mp3",
@@ -39,7 +34,7 @@ const items = [
   { id: "05", image: "/soundboard/images/05.png", clips: ["/soundboard/clips/05/soundboard clips_love island_text.mp3"] },
 ];
 
-export default function SoundboardPage() {
+export default function SoundboardGrid() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const indexRef = useRef<Record<string, number>>({});
 
@@ -47,7 +42,6 @@ export default function SoundboardPage() {
     const current = indexRef.current[item.id] ?? 0;
     const clip = item.clips[current % item.clips.length];
     indexRef.current[item.id] = (current + 1) % item.clips.length;
-
     const audio = audioRef.current;
     if (!audio) return;
     audio.pause();
@@ -56,12 +50,15 @@ export default function SoundboardPage() {
   };
 
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "3rem 1.5rem", fontFamily: font }}>
-      <p style={{ fontSize: "0.85rem", marginBottom: "2rem" }}>
-        <Link href="/home" style={{ color: "#333" }}>← Back</Link>
-      </p>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "12px",
+          maxWidth: "600px",
+        }}
+      >
         {items.map((item) => (
           <button
             key={item.id}
@@ -69,30 +66,24 @@ export default function SoundboardPage() {
             style={{
               background: "none",
               border: "2px solid transparent",
-              borderRadius: "12px",
-              padding: "0.5rem",
+              padding: "6px",
               cursor: "pointer",
               transition: "border-color 0.15s, transform 0.15s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "#333";
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.05)";
+              e.currentTarget.style.borderColor = "var(--dark)";
+              e.currentTarget.style.transform = "scale(1.04)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "transparent";
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+              e.currentTarget.style.borderColor = "transparent";
+              e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            <img
-              src={item.image}
-              alt={`soundboard item ${item.id}`}
-              style={{ width: "100%", borderRadius: "8px", display: "block" }}
-            />
+            <img src={item.image} alt="" style={{ width: "100%", display: "block" }} />
           </button>
         ))}
       </div>
-
       <audio ref={audioRef} />
-    </div>
+    </>
   );
 }
