@@ -1,28 +1,44 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import Link from "next/link";
 
-const links = [
+const navLinks = [
   { label: "Home", target: "hero" },
   { label: "Work", target: "work" },
   { label: "About", target: "about" },
 ];
 
+const scrollTo = (id: string) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+};
+
+const linkStyle = {
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "0.8rem",
+  color: "var(--dark)",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase" as const,
+  fontWeight: 500,
+  fontFamily: "inherit",
+};
+
 export default function MainNav() {
-  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Banner collapses from ~40vh to 58px over first 320px of scroll
+  const navHeight = useTransform(scrollY, [0, 320], ["42vh", "58px"]);
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
+  // Hero name/title fades and rises away
+  const heroOpacity = useTransform(scrollY, [0, 180], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 180], [0, -24]);
+
+  // Compact name fades in after banner is mostly collapsed
+  const compactNameOpacity = useTransform(scrollY, [180, 300], [0, 1]);
 
   return (
-    <nav
+    <motion.nav
       style={{
         position: "fixed",
         top: 0,
@@ -30,62 +46,87 @@ export default function MainNav() {
         right: 0,
         zIndex: 100,
         backgroundColor: "var(--yellow)",
-        padding: scrolled ? "10px 40px" : "18px 40px",
+        height: navHeight,
+        overflow: "hidden",
         display: "flex",
-        alignItems: "center",
+        flexDirection: "column",
         justifyContent: "space-between",
-        transition: "padding 0.3s ease",
       }}
     >
-      <button
-        onClick={() => scrollTo("hero")}
-        className="serif"
+      {/* Top row: compact name (fades in) + nav links (always visible) */}
+      <div
         style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "1.1rem",
-          fontWeight: 400,
-          color: "var(--dark)",
-          letterSpacing: "0.02em",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 48px",
+          height: "58px",
+          flexShrink: 0,
         }}
       >
-        Caralyn Moore
-      </button>
-
-      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-        {links.map(({ label, target }) => (
-          <button
-            key={label}
-            onClick={() => scrollTo(target)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.875rem",
-              color: "var(--dark)",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              fontWeight: 500,
-            }}
-          >
-            {label}
-          </button>
-        ))}
-        <Link
-          href="/fun"
+        <motion.button
+          onClick={() => scrollTo("hero")}
+          className="serif"
           style={{
-            fontSize: "0.875rem",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1rem",
             color: "var(--dark)",
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            fontWeight: 500,
-            textDecoration: "none",
+            opacity: compactNameOpacity,
+            fontFamily: "inherit",
           }}
         >
-          Fun
-        </Link>
+          Caralyn Moore
+        </motion.button>
+
+        <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+          {navLinks.map(({ label, target }) => (
+            <button key={label} onClick={() => scrollTo(target)} style={linkStyle}>
+              {label}
+            </button>
+          ))}
+          <Link
+            href="/fun"
+            style={{ ...linkStyle, textDecoration: "none", display: "inline" }}
+          >
+            Fun
+          </Link>
+        </div>
       </div>
-    </nav>
+
+      {/* Hero banner content: large name + title, fades out on scroll */}
+      <motion.div
+        style={{
+          padding: "0 48px 52px",
+          opacity: heroOpacity,
+          y: heroY,
+        }}
+      >
+        <p
+          style={{
+            fontSize: "0.72rem",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "var(--mid)",
+            marginBottom: "0.75rem",
+          }}
+        >
+          Video Editor &amp; Storyteller
+        </p>
+        <h1
+          className="serif"
+          style={{
+            fontSize: "clamp(2.8rem, 6vw, 5.5rem)",
+            fontWeight: 400,
+            color: "var(--dark)",
+            lineHeight: 1,
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Caralyn Moore
+        </h1>
+      </motion.div>
+    </motion.nav>
   );
 }
