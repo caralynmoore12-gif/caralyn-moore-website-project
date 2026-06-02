@@ -1,6 +1,8 @@
 "use client";
-import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+
+const SCROLL_RANGE = 300;
 
 const navLinks = [
   { label: "Home", target: "hero" },
@@ -12,33 +14,35 @@ const scrollTo = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 };
 
-const linkStyle = {
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-  fontSize: "0.8rem",
-  color: "var(--dark)",
-  letterSpacing: "0.1em",
-  textTransform: "uppercase" as const,
-  fontWeight: 500,
-  fontFamily: "inherit",
-};
-
 export default function MainNav() {
-  const { scrollY } = useScroll();
+  const [ratio, setRatio] = useState(0); // 0 = fully expanded, 1 = fully collapsed
 
-  // Banner collapses from ~40vh to 58px over first 320px of scroll
-  const navHeight = useTransform(scrollY, [0, 320], ["42vh", "58px"]);
+  useEffect(() => {
+    const onScroll = () => setRatio(Math.min(window.scrollY / SCROLL_RANGE, 1));
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  // Hero name/title fades and rises away
-  const heroOpacity = useTransform(scrollY, [0, 180], [1, 0]);
-  const heroY = useTransform(scrollY, [0, 180], [0, -24]);
+  const heroOpacity = Math.max(0, 1 - ratio * 2);
+  const compactNameOpacity = Math.max(0, (ratio - 0.6) / 0.4);
+  // Extra banner height collapses from ~38vh to 0
+  const bannerVh = 38 * (1 - ratio);
 
-  // Compact name fades in after banner is mostly collapsed
-  const compactNameOpacity = useTransform(scrollY, [180, 300], [0, 1]);
+  const linkStyle: React.CSSProperties = {
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "0.8rem",
+    color: "var(--dark)",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    fontWeight: 500,
+    fontFamily: "inherit",
+    textDecoration: "none",
+  };
 
   return (
-    <motion.nav
+    <nav
       style={{
         position: "fixed",
         top: 0,
@@ -46,39 +50,33 @@ export default function MainNav() {
         right: 0,
         zIndex: 100,
         backgroundColor: "var(--yellow)",
-        height: navHeight,
         overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
       }}
     >
-      {/* Top row: compact name (fades in) + nav links (always visible) */}
+      {/* Compact row — always 58px tall */}
       <div
         style={{
+          height: "58px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 48px",
-          height: "58px",
-          flexShrink: 0,
         }}
       >
-        <motion.button
+        <button
           onClick={() => scrollTo("hero")}
           className="serif"
           style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
+            ...linkStyle,
             fontSize: "1rem",
-            color: "var(--dark)",
+            letterSpacing: "0.02em",
+            textTransform: "none",
             opacity: compactNameOpacity,
-            fontFamily: "inherit",
+            transition: "opacity 0.15s ease",
           }}
         >
           Caralyn Moore
-        </motion.button>
+        </button>
 
         <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
           {navLinks.map(({ label, target }) => (
@@ -86,21 +84,22 @@ export default function MainNav() {
               {label}
             </button>
           ))}
-          <Link
-            href="/fun"
-            style={{ ...linkStyle, textDecoration: "none", display: "inline" }}
-          >
-            Fun
-          </Link>
+          <Link href="/fun" style={linkStyle}>Fun</Link>
         </div>
       </div>
 
-      {/* Hero banner content: large name + title, fades out on scroll */}
-      <motion.div
+      {/* Collapsing banner — extra height that shrinks to zero */}
+      <div
         style={{
-          padding: "0 48px 52px",
+          height: `${bannerVh}vh`,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: "0 48px 40px",
           opacity: heroOpacity,
-          y: heroY,
+          transform: `translateY(${-ratio * 16}px)`,
+          transition: "none",
         }}
       >
         <p
@@ -126,7 +125,7 @@ export default function MainNav() {
         >
           Caralyn Moore
         </h1>
-      </motion.div>
-    </motion.nav>
+      </div>
+    </nav>
   );
 }
