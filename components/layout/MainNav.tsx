@@ -2,6 +2,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+// These constants are also used by HeroSection to align the photo
+export const COMPACT_H = 44;       // px — collapsed nav height
+export const BANNER_EXTRA_VH = 16; // vh — extra height that collapses to 0
+
 const SCROLL_RANGE = 300;
 
 const navLinks = [
@@ -15,7 +19,7 @@ const scrollTo = (id: string) => {
 };
 
 export default function MainNav() {
-  const [ratio, setRatio] = useState(0); // 0 = fully expanded, 1 = fully collapsed
+  const [ratio, setRatio] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setRatio(Math.min(window.scrollY / SCROLL_RANGE, 1));
@@ -25,14 +29,13 @@ export default function MainNav() {
 
   const heroOpacity = Math.max(0, 1 - ratio * 2);
   const compactNameOpacity = Math.max(0, (ratio - 0.6) / 0.4);
-  // Extra banner height collapses from ~38vh to 0
-  const bannerVh = 16 * (1 - ratio);
+  const bannerVh = BANNER_EXTRA_VH * (1 - ratio);
 
   const linkStyle: React.CSSProperties = {
     background: "none",
     border: "none",
     cursor: "pointer",
-    fontSize: "0.8rem",
+    fontSize: "0.75rem",
     color: "var(--dark)",
     letterSpacing: "0.1em",
     textTransform: "uppercase",
@@ -53,10 +56,10 @@ export default function MainNav() {
         overflow: "hidden",
       }}
     >
-      {/* Compact row — always 58px tall */}
+      {/* Compact row */}
       <div
         style={{
-          height: "58px",
+          height: `${COMPACT_H}px`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -68,7 +71,7 @@ export default function MainNav() {
           className="serif"
           style={{
             ...linkStyle,
-            fontSize: "1rem",
+            fontSize: "0.95rem",
             letterSpacing: "0.02em",
             textTransform: "none",
             opacity: compactNameOpacity,
@@ -88,7 +91,7 @@ export default function MainNav() {
         </div>
       </div>
 
-      {/* Collapsing banner — extra height that shrinks to zero */}
+      {/* Collapsing extra banner */}
       <div
         style={{
           height: `${bannerVh}vh`,
@@ -96,19 +99,18 @@ export default function MainNav() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          padding: "0 48px 40px",
+          padding: "0 48px 32px",
           opacity: heroOpacity,
           transform: `translateY(${-ratio * 16}px)`,
-          transition: "none",
         }}
       >
         <p
           style={{
-            fontSize: "0.72rem",
+            fontSize: "0.7rem",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             color: "var(--mid)",
-            marginBottom: "0.75rem",
+            marginBottom: "0.6rem",
           }}
         >
           Video Editor &amp; Storyteller
@@ -116,7 +118,7 @@ export default function MainNav() {
         <h1
           className="serif"
           style={{
-            fontSize: "clamp(2.8rem, 6vw, 5.5rem)",
+            fontSize: "clamp(2.5rem, 5.5vw, 5rem)",
             fontWeight: 400,
             color: "var(--dark)",
             lineHeight: 1,

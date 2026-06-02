@@ -1,4 +1,9 @@
+import { COMPACT_H, BANNER_EXTRA_VH } from "@/components/layout/MainNav";
+
 export default function HeroSection() {
+  const imageTop = `calc(${COMPACT_H}px + ${BANNER_EXTRA_VH}vh)`;
+  const imageHeight = `calc(100dvh - ${COMPACT_H}px - ${BANNER_EXTRA_VH}vh)`;
+
   return (
     <section
       id="hero"
@@ -13,11 +18,13 @@ export default function HeroSection() {
         alt="Caralyn Moore"
         style={{
           position: "absolute",
-          inset: 0,
+          top: imageTop,
+          left: 0,
+          right: 0,
           width: "100%",
-          height: "100%",
+          height: imageHeight,
           objectFit: "cover",
-          objectPosition: "center 80%",
+          objectPosition: "center top",
           display: "block",
         }}
       />
