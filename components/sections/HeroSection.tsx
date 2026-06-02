@@ -17,7 +17,7 @@ export default function HeroSection() {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "center 55%",
+          objectPosition: "center 80%",
           display: "block",
         }}
       />
