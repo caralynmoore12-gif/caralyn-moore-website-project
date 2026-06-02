@@ -1,12 +1,13 @@
 import ProjectCard from "@/components/ui/ProjectCard";
 
-const projects: { title: string; thumbnail?: string; href?: string }[] = [
-  // Add project data here when ready
-  { title: "Project coming soon" },
-  { title: "Project coming soon" },
-  { title: "Project coming soon" },
-  { title: "Project coming soon" },
-  { title: "Project coming soon" },
+const VIMEO_PLACEHOLDER = "https://player.vimeo.com/video/642145610?h=799683bfe3&badge=0&autopause=0&player_id=0&app_id=58479";
+
+const projects: { title: string; thumbnail?: string; href?: string; vimeoSrc?: string }[] = [
+  { title: "Camp Kuleshov 2021 — Love Without A Mask", vimeoSrc: VIMEO_PLACEHOLDER },
+  { title: "Camp Kuleshov 2021 — Love Without A Mask", vimeoSrc: VIMEO_PLACEHOLDER },
+  { title: "Camp Kuleshov 2021 — Love Without A Mask", vimeoSrc: VIMEO_PLACEHOLDER },
+  { title: "Camp Kuleshov 2021 — Love Without A Mask", vimeoSrc: VIMEO_PLACEHOLDER },
+  { title: "Camp Kuleshov 2021 — Love Without A Mask", vimeoSrc: VIMEO_PLACEHOLDER },
 ];
 
 export default function WorkSection() {

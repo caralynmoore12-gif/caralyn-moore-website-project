@@ -5,17 +5,44 @@ interface ProjectCardProps {
   title: string;
   thumbnail?: string;
   href?: string;
+  vimeoSrc?: string;
 }
 
-export default function ProjectCard({ title, thumbnail, href }: ProjectCardProps) {
+export default function ProjectCard({ title, thumbnail, href, vimeoSrc }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
+
+  if (vimeoSrc) {
+    return (
+      <div style={{ width: "480px", flexShrink: 0 }}>
+        <div style={{ position: "relative", paddingTop: "56.25%" }}>
+          <iframe
+            src={vimeoSrc}
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+            title={title}
+          />
+        </div>
+        <p
+          style={{
+            marginTop: "12px",
+            fontSize: "0.85rem",
+            color: "#aaaaaa",
+            letterSpacing: "0.03em",
+          }}
+        >
+          {title}
+        </p>
+      </div>
+    );
+  }
 
   const inner = (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        width: "280px",
+        width: "480px",
         aspectRatio: "16 / 9",
         flexShrink: 0,
         backgroundColor: "#1c1c1c",
