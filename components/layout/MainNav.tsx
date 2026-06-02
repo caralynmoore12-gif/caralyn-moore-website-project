@@ -26,7 +26,7 @@ export default function MainNav() {
   const heroOpacity = Math.max(0, 1 - ratio * 2);
   const compactNameOpacity = Math.max(0, (ratio - 0.6) / 0.4);
   // Extra banner height collapses from ~38vh to 0
-  const bannerVh = 38 * (1 - ratio);
+  const bannerVh = 16 * (1 - ratio);
 
   const linkStyle: React.CSSProperties = {
     background: "none",
