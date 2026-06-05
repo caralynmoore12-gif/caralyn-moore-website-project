@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const items = [
   { id: "03", image: "/soundboard/images/03.png", clips: ["/soundboard/clips/03/soundboard clips_blueberries.mp3"] },
@@ -209,6 +209,7 @@ const items = [
 export default function SoundboardGrid() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const indexRef = useRef<Record<string, number>>({});
+  const [shuffled] = useState(() => [...items].sort(() => Math.random() - 0.5));
 
   const play = (item: typeof items[number]) => {
     const current = indexRef.current[item.id] ?? 0;
@@ -226,12 +227,11 @@ export default function SoundboardGrid() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
           gap: "12px",
-          maxWidth: "600px",
         }}
       >
-        {items.map((item) => (
+        {shuffled.map((item) => (
           <button
             key={item.id}
             onClick={() => play(item)}
